@@ -94,23 +94,6 @@ class UserController extends Controller
 	{
 		$users = User::where('role_id', '!=', 1);
 
-		$user = $request->user();
-		if ($user->role->hash_id=='qwe123') { //superadmin
-			if ($request->input('is_vendor')!=null && $request->input('is_vendor')>=0) {
-				if ($request->input('is_vendor')==1) {
-					$users = $users->where('role_id', 2); //vendor admin
-				} elseif ($request->input('is_vendor')==0) {
-					$users = $users->where('role_id', 3); //student
-				}
-			}
-
-			if ($request->input('vendor_id')!=null && $request->input('is_vendor')>=0) {
-				$users = $users->where('vendor_id', $request->input('vendor_id'));
-			}
-		} elseif ($user->role->hash_id=='asd123') { // vendor admin
-			$users = $users->where('role_id', 3);
-		}
-
 		$search = $request->input('search');
         $users = $users->where(function ($query) use ($search) {
             $query->orWhere('name', 'LIKE', '%'.$search.'%');
@@ -119,45 +102,6 @@ class UserController extends Controller
         });
 
 		return response()->json($users->paginate(10));
-	}
-
-	public function getTopSummary(Request $request)
-	{
-        $user = request()->user();
-        
-		$result['ideas'] = Ideas::where('status', 1)
-								->where(\DB::raw('CONCAT(title, " ", description)'), 'LIKE', '%'.$request->input('search').'%')
-								->select('ideas.*')
-								->leftJoin('vendors', 'vendors.id', '=', 'ideas.vendor_id')
-								->orderBy('vendors.vendor_level_id', 'desc')
-								->orderBy('created_at', 'desc')->take(8)->get();
-	    foreach ($result['ideas'] as $idea) {
-	        if ($user) {
-	            $idea['is_save'] = \DB::table('ideas_users')->where('user_id', $user->id)->where('ideas_id', $idea->id)->exists();
-	        }
-	    }
-
-	    $result['vendors'] = Vendor::where('is_active', 1)
-									->where(\DB::raw('CONCAT(name, " ", address)'), 'LIKE', '%'.$request->input('search').'%')
-	    							->orderBy('created_at', 'desc')->take(8)->get();
-
-	    $result['blogs'] = Blog::where('status', 1)
-								->where('title', 'LIKE', '%'.$request->input('search').'%')
-	    						->orderBy('created_at', 'desc')->take(8)->get();
-
-	    foreach ($result['blogs'] as $blog) {
-	    	$userBlog = User::find($blog->user_id);
-	    	$blog['username'] = $userBlog->username;
-	    	$blog['name'] = $userBlog->name;
-	    }
-
-		return response()->json($result);
-	}
-
-	public function getStudentBlog(User $user)
-	{
-		$blogs = $user->blogs();
-		return response()->json($blogs->paginate(10));
 	}
 
 	public function requestChangeEmail(Request $request)

@@ -12,13 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\SoftDeleteable(fieldName="deleted_at", timeAware=false)
  */
 class User extends ParentEntities
-{
-    /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $location;
-    
+{   
     /**
      * @var string
      * @ORM\Column(type="string", unique=true)
@@ -69,13 +63,6 @@ class User extends ParentEntities
     protected $role;
 
     /**
-     * @var Vendor
-     * @ORM\ManyToOne(targetEntity="Vendor", inversedBy="users")
-     * @ORM\JoinColumn(name="vendor_id", onDelete="SET NULL", nullable=true)
-     */
-    protected $vendor;
-
-    /**
      * @var \DateTime
      * @ORM\Column(type="date", nullable=true)
      */
@@ -110,12 +97,6 @@ class User extends ParentEntities
      * @ORM\Column(name="is_active",type="integer")
      */
     protected $is_active;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $referral;
 
     /**
      * @var \DateTime

@@ -45,7 +45,7 @@ class FCMController extends Controller
 	public function sendNotificationGroup(Request $request, NotificationService $notificationService)
 	{
 		$this->validate($request, [
-            'to' => 'required|in:vendor,student,all',
+            'to' => 'required|in:all',
             'notification.title' => 'required',
             'notification.body' => 'required',
             'data' => 'nullable',
@@ -56,17 +56,7 @@ class FCMController extends Controller
 		$data = $request->input('data') ? $request->input('data') : [];
 
 		$query = new \App\Models\UserDevice;
-		if ($request->input('to')=='vendor') {
-			$query = $query->join('users', function ($join) {
-                            $join->on('user_devices.user_id', '=', 'users.id')
-                                 ->where('users.role_id', 2);
-            });
-		} elseif ($request->input('to')=='student') {
-			$query = $query->join('users', function ($join) {
-                            $join->on('user_devices.user_id', '=', 'users.id')
-                                 ->where('users.role_id', 3);
-            });
-		} elseif ($request->input('to')=='all') {
+		if ($request->input('to')=='all') {
 			$query = $query->join('users', function ($join) {
                             $join->on('user_devices.user_id', '=', 'users.id')
                                  ->whereNotIn('users.role_id', [1]);

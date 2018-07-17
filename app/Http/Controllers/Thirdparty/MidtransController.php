@@ -26,17 +26,15 @@ class MidtransController extends Controller
     {   
     	if (env('APP_ENV', 'local')=='production') {
 	        Veritrans::$isProduction = true;
-	        Veritrans::$serverKey = env('MIDTRANS_PRODUCTION', 'SB-Mid-server-bJXghQDKV90RkcXfD90a4UeR');
+	        Veritrans::$serverKey = env('MIDTRANS_PRODUCTION', 'SB-Mid-server-bJXghQDKV90RkcXfD90a4UeRtestttt');
     	} else {
     		Veritrans::$isProduction = false;
-	        Veritrans::$serverKey = env('MIDTRANS_SANDBOX', 'SB-Mid-server-bJXghQDKV90RkcXfD90a4UeR');
+	        Veritrans::$serverKey = env('MIDTRANS_SANDBOX', 'SB-Mid-server-bJXghQDKV90RkcXfD90a4UeRtestttt');
     	}
     }
 
     public function charge()
     {
-        \DB::beginTransaction();
-
     	$request_body = file_get_contents('php://input');
     	$transaction_data = json_decode($request_body, true);
 
@@ -64,6 +62,7 @@ class MidtransController extends Controller
             throw new  \Exception("Permission denied!");
         }
 
+        //if use CC with credit payment
 		$installment = [
         	"required" => false,
         	"terms" => [
@@ -80,39 +79,6 @@ class MidtransController extends Controller
 		$midtrans_data = json_encode($transaction_data);
     	$vt = new Veritrans;
     	$result = $vt->getSnapToken($midtrans_data);
-
-    	//check key object
-    	if (!property_exists(json_decode($result), 'error_messages')) {
-	    	//check key array
-	    	$couponRedeemId = null;
-    		if (array_key_exists('coupon_redeem_id', $transaction_data)) {
-	    		$couponRedeemId = $transaction_data['coupon_redeem_id'];
-	    	} elseif (array_key_exists('custom_field3', $transaction_data)) {
-	    		$couponRedeemId = $transaction_data['custom_field3'];
-	    	}
-
-	    	if ($couponRedeemId) {
-	    		$userCouponRedeem = UserCouponRedeem::where('user_id', $user->id)->where('id', $couponRedeemId)->first();
-	    		if (!$userCouponRedeem) {
-		            throw new  \Exception("Coupon redeem not found.");
-	    		}
-	    		if ($userCouponRedeem->status == UserCouponRedeem::STATUS_REDEEMED) {
-		            throw new  \Exception("Coupon redeem cannot use.");
-	    		}
-				$invoice = Invoice::where('hash_id', $transaction_data['transaction_details']['order_id'])->first();
-				if (!$invoice) {
-		            throw new  \Exception("Invoice not found.");
-				}
-
-				$userCouponRedeem->status = UserCouponRedeem::STATUS_INVALID;
-				$userCouponRedeem->save();
-
-				$invoice->user_coupon_redeem_id = $userCouponRedeem->id;
-				$invoice->save();
-	    	}
-    	}
-
-		\DB::commit();
 
     	return $result;
     }
@@ -160,99 +126,49 @@ class MidtransController extends Controller
 				  	// For credit card transaction, we need to check whether transaction is challenge by FDS or not
 				  	if ($type == 'credit_card'){
 				    	if($fraud == 'challenge'){
-				    		$invoice->status = Invoice::STATUS_PENDING;
-							$invoice->save();
-
-				      		// TODO set payment status in merchant's database to 'Challenge by FDS'
-				      		// TODO merchant should decide whether this transaction is authorized or not in MAP
-				      		// echo "Transaction order_id: " . $order_id ." is challenged by FDS";
+				   			// $invoice->status = Invoice::STATUS_PENDING;
+							// $invoice->save();
 				      	} else {
 					        \DB::beginTransaction();
 
-				      		$invoice->status = Invoice::STATUS_COMPLETE;
-				    		if (property_exists($notif, 'installment_term')) {
-					    		$invoice->installment_period = $notif->installment_term;
-				    		}
-					  		$invoice->save();
+						    // $invoice->status = Invoice::STATUS_COMPLETE;
+				    		// if (property_exists($notif, 'installment_term')) {
+					    	// 	$invoice->installment_period = $notif->installment_term;
+				    		// }
+					  		// $invoice->save();
 
 					  		//complete status
 					  		$this->completeTransaction($invoice);
 
-					  		//create balance
-					  		$balance = UserBalance::create([
-					  			'type' => 'invoice',
-					  			'model_id' => $invoice->id,
-					  			'description' => "Transaction invoice: " . $order_id ." successfully transfered using " . $type,
-					  			'user_id' => null,
-					  			'vendor_id' => $invoice->vendor_id,
-					  			'balance' => $invoice->cost,
-					  		]);
-
 							\DB::commit();
-				      		// TODO set payment status in merchant's database to 'Success'
-				      		// echo "Transaction order_id: " . $order_id ." successfully captured using " . $type;
 				      	}
 				    }
 				} else if ($transaction == 'settlement'){
 			        \DB::beginTransaction();
 
-			  		// TODO set payment status in merchant's database to 'Settlement'
-			  		$invoice->status = Invoice::STATUS_COMPLETE;
-			  		$invoice->save();
+			  		// $invoice->status = Invoice::STATUS_COMPLETE;
+			  		// $invoice->save();
 
 			  		//complete status
 			  		$this->completeTransaction($invoice);
 
-			  		//create balance
-			  		$balance = UserBalance::create([
-			  			'type' => 'invoice',
-			  			'model_id' => $invoice->id,
-			  			'description' => "Transaction invoice: " . $order_id ." successfully transfered using " . $type,
-			  			'user_id' => null,
-			  			'vendor_id' => $invoice->vendor_id,
-			  			'balance' => $invoice->cost,
-			  		]);
-
 					\DB::commit();
-			  		// echo "Transaction order_id: " . $order_id ." successfully transfered using " . $type;
 			  	} else if ($transaction == 'pending') {
-			  		$invoice->status = Invoice::STATUS_PENDING;
-					$invoice->save();
-
-				  	// TODO set payment status in merchant's database to 'Pending'
-				  	// echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
+			  // 		$invoice->status = Invoice::STATUS_PENDING;
+					// $invoice->save();
 				} else if ($transaction == 'deny') {
-					$invoice->status = Invoice::STATUS_DENIED;
-					$invoice->save();
-
-				  	// TODO set payment status in merchant's database to 'Denied'
-				  	// echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
+					// $invoice->status = Invoice::STATUS_DENIED;
+					// $invoice->save();
 				} else if ($transaction == 'expire') {
-					$invoice->status = Invoice::STATUS_EXPIRED;
-					$invoice->save();
+					// $invoice->status = Invoice::STATUS_EXPIRED;
+					// $invoice->save();
 
 					$this->failedTransaction($invoice);
-
-				  	// TODO set payment status in merchant's database to 'expire'
-				  	// echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is expired.";
 				} else if ($transaction == 'cancel') {
-					$invoice->status = Invoice::STATUS_CANCEL;
-					$invoice->save();
+					// $invoice->status = Invoice::STATUS_CANCEL;
+					// $invoice->save();
 
 					$this->failedTransaction($invoice);
-
-					//cancel user balance if any
-					$balance = UserBalance::create([
-			  			'type' => 'invoice',
-			  			'model_id' => $invoice->id,
-			  			'description' => "Payment using " . $type . " for transaction order_id: " . $order_id . " is canceled.",
-			  			'user_id' => null,
-			  			'vendor_id' => $invoice->vendor_id,
-			  			'balance' => -$invoice->cost,
-			  		]);
-
-				  	// TODO set payment status in merchant's database to 'Denied'
-				  	// echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is canceled.";
 				}
 	  		} else {
 	  			//create log
@@ -276,76 +192,28 @@ class MidtransController extends Controller
     {
 		\DB::beginTransaction();
 
-		if ($invoice->user_coupon_redeem_id) {
-			$userCouponRedeem = UserCouponRedeem::where('id', $invoice->user_coupon_redeem_id)->first();
-    		if ($userCouponRedeem) {
-    			$userCouponRedeem->status = UserCouponRedeem::STATUS_VALID;
-    			$userCouponRedeem->save();	
-    		}
-    		$invoice->user_coupon_redeem_id = null;
-			$invoice->save();
-		}
+		//what do you want to do in your DB if transaction fail
 
 		\DB::commit();
     }
 
     private function completeTransaction($invoice)
     {
-		if ($invoice->user_coupon_redeem_id) {
-			$userCouponRedeem = UserCouponRedeem::where('id', $invoice->user_coupon_redeem_id)->first();
-			if ($userCouponRedeem) {
-				$userCouponRedeem->status = UserCouponRedeem::STATUS_REDEEMED;
-				$userCouponRedeem->save();	
-			}
-		}
+		\DB::beginTransaction();
 
-		//get point transaction
-		$pointService = new PointService;
-		$user = User::find($invoice->user_id);
-        $point = ConfigContent::where('config_id', 8)->where('name', 'Success transaction')->first();
-        if ($point) {
-	        $data = [
-	            'description' => $invoice->hash_id,
-	            'point' => $point->value,
-	        ];
-	        $pointService->increaseDecreasePoint(UserPoint::TYPE_TRANSACTION, $data, $user);
-        }
-        //get point vendor referrence
-        $vendor = \DB::table('vendors')->where('id', $invoice->vendor_id)->first();
-        $chatReverrence = ChatContent::where('user_id', 1)->where('for_user_id', $user->id)->where('attached_vendor', $vendor->hash_id)->orderBy('created_at', 'desc')->first();
-        if ($chatReverrence) {
-	        $chatReverrencePlus3Month = (new \DateTime($chatReverrence->created_at))->modify('+3 month');
-	        if ($chatReverrencePlus3Month >= new \DateTime) {
-	        	$point = \DB::table('user_points')->where('type', UserPoint::TYPE_VENDOR_REFERENCE)->where('user_id', $user->id)->where('model_id', $vendor->id)->first();
-	        	//jika sudah pernah maka gak bisa dapet lg
-	        	if (!$point) {
-			        $configContent = ConfigContent::where('config_id', 8)->where('name', 'Vendor reference')->first();
-			        if ($configContent) {
-				        $data = [
-				        	'model_id' => $vendor->id,
-				            'description' => $vendor->name,
-				            'point' => $point->value,
-				        ];
-				        $pointService->increaseDecreasePoint(UserPoint::TYPE_VENDOR_REFERENCE, $data, $user);
-			        }
-	        	}
-	        }
-        }
+		//what do you want to do in your DB if transaction success
 
 		//push notif
-		$notificationService = new NotificationService;
-		$userVendor = User::where('vendor_id', $invoice->vendor_id)->first();
-        $title = 'Ezyedu';
-        $body = $invoice->hash_id . ' successfully paid!';
-        $data['invoice_hash_id'] = $invoice->hash_id;
-        $data['type'] = 'notif_success_paid';
-        $student_recipients = $notificationService->getDeviceToken($invoice->user_id);
-        $vendor_recipients = $notificationService->getDeviceToken($userVendor->id);
-        if ($student_recipients) {
-            $notificationService->pushNotification($title, $body, $student_recipients, $data, $invoice->user_id);
-        }
-        if ($vendor_recipients) {
-            $notificationService->pushNotification($title, $body, $vendor_recipients, $data, $userVendor->id);
-        }
+		// $notificationService = new NotificationService;
+  //       $title = 'Codedoct';
+  //       $body = 'successfully paid!';
+  //       $data['invoice_hash_id'] = $invoice->hash_id;
+  //       $data['type'] = 'notif_success_paid';
+  //       $student_recipients = $notificationService->getDeviceToken($invoice->user_id);
+  //       if ($student_recipients) {
+  //           $notificationService->pushNotification($title, $body, $student_recipients, $data, $invoice->user_id);
+  //       }
+
+		\DB::commit();
     }
 }
