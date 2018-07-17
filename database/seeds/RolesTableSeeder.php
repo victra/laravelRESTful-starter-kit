@@ -23,16 +23,9 @@ class RolesTableSeeder extends Seeder
                 'updated_at' => '2017-01-01 00:00:00',
             ),
             array (
-                'id' => 2,
-                'hash_id' => 'asd123',
-                'name' => 'Vendor Admin',
-                'created_at' => '2017-01-01 00:00:00',
-                'updated_at' => '2017-01-01 00:00:00',
-            ),
-            array (
                 'id' => 3,
                 'hash_id' => 'zxc123',
-                'name' => 'Student',
+                'name' => 'User',
                 'created_at' => '2017-01-01 00:00:00',
                 'updated_at' => '2017-01-01 00:00:00',
             ),

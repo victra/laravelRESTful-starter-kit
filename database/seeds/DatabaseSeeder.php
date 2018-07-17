@@ -18,12 +18,12 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        // $this->call(RolesTableSeeder::class);
-        // $this->call(UsersTableSeeder::class);
-        // $this->call(VendorLevelTableSeeder::class);
-        // $this->call(ProvincesTableSeeder::class);
-        // $this->call(CitiesTableSeeder::class);
-        // $this->call(DistrictsTableSeeder::class);
+        $this->call(RolesTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
+        $this->call(VendorLevelTableSeeder::class);
+        $this->call(ProvincesTableSeeder::class);
+        $this->call(CitiesTableSeeder::class);
+        $this->call(DistrictsTableSeeder::class);
         $this->call(ConfigsTableSeeder::class);
         $this->call(ConfigContentsTableSeeder::class);
 
