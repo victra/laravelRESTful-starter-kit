@@ -1,11 +1,6 @@
 <?php
 
 Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
-	//-----top summary idea, vendor, blog general
-  Route::group(['prefix' => 'top-summary'], function () {
-	  Route::get('', 'UserController@getTopSummary');
-	});
-
 	//-----user vendor review and reply
   Route::group(['prefix' => 'vendor-review'], function () {
   	//-----review
