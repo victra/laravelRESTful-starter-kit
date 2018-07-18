@@ -19,12 +19,7 @@ Laravel Backend Starter Kit is a project created by codedoct developer, that use
 2. Build the composer:
 
 
-	$ composer install
-
-
-
 	$ composer require brozot/laravel-fcm
-
 
 
 3. Fill project information like DB, AWS key, mailtrap, etc to .env file
