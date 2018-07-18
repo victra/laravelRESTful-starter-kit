@@ -25,3 +25,5 @@ $ php artisan doctrine:migration:migrate
 5. Seeding Database
 $ php artisan db::seed
 
+## How to use
+
