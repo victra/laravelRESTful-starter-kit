@@ -16,13 +16,13 @@ Laravel Backend Starter Kit is a project created by codedoct developer, that use
 
 ## Instalation
 1. Create .env file from .env.example file.
-2. Build the composer
+2. Build the composer:
 $ composer install
 3. Fill project information like DB, AWS key, mailtrap, etc to .env file
-4. Migration Database
+4. Migration Database:
 $ php artisan doctrine:migration:diff
 $ php artisan doctrine:migration:migrate
-5. Seeding Database
+5. Seeding Database:
 $ php artisan db::seed
 
 ## How to use
