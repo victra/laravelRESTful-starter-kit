@@ -18,7 +18,7 @@ Laravel Backend Starter Kit is a project created by codedoct developer, that use
 1. Create .env file from .env.example file.
 2. Build the composer:
 
-```terminal
+```
 	$ composer install
 ```
 
