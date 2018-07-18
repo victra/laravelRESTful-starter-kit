@@ -19,7 +19,7 @@ class ConfigContentsTableSeeder extends Seeder
                 'id' => 1,
                 'config_id' => 1,
                 'name' => 'User',
-                'value' => 1,
+                'value' => true,
                 'created_at' => '2017-01-01 00:00:00',
                 'updated_at' => '2017-01-01 00:00:00',
             ),

@@ -18,7 +18,7 @@ class ConfigsTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'title' => 'Image',
-                'unit' => 'image',
+                'unit' => 'Yes/No',
             ),
         ));
     }

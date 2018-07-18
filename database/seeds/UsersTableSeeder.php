@@ -21,7 +21,6 @@ class UsersTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'role_id' => 1,
-                'vendor_id' => null,
                 'email' => 'super_admin@mail.com',
                 'password' => bcrypt('password'),
                 'name' => 'Codedoct',

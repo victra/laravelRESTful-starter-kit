@@ -55,28 +55,13 @@ class RegisterController extends Controller
             'role' => 'required|exists:App\Entities\Role,hash_id|in:asd123,zxc123',
             'birth_date' => 'nullable|date_format:Y-m-d',
             'gender' => 'nullable|in:male,female',
-            'phone' => 'nullable|min:1|max:25',
-            // 'phone' => 'required_if:role,==,asd123|min:9|max:15',
-            'phone_2' => 'nullable|min:1|max:25',
+            'phone' => 'required|min:10|max:25',
+            'phone_2' => 'nullable|min:10|max:25',
             'provider' => 'nullable|in:google,facebook',
-            'referral' => 'nullable|exists:App\Entities\User,hash_id',
         ]);
 
-        $input = $request->except(['role', 'referral']);
+        $input = $request->except(['role']);
         $user = User::create($input);
-
-        if ($request->input('role')=='zxc123') {//student
-            if ($request->input('referral')) {
-                $userReferral = User::where('hash_id', $request->input('referral'))->first();
-                if ($userReferral->role->hash_id=='zxc123') {//student
-                    if ($userReferral->is_active==User::STATUS_BANNED) {
-                        throw new  \Exception("User referral banned.");
-                    }
-                    //save referral
-                    $user->referral = $request->input('referral');
-                }
-            }
-        }
 
         $role = Role::where('hash_id', $request->input('role'))->first();
         $user->role()->associate($role);
@@ -92,26 +77,6 @@ class RegisterController extends Controller
         if ($request->input('provider') && $request->input('provider_id')) {
             $user->is_active = true;
             $user->save();
-
-            //get point
-            if ($user->referral) {
-                $userReferral = User::where('hash_id', $user->referral)->first();
-                $pointInviter = ConfigContent::where('config_id', 8)->where('name', 'Referral inviter')->first();
-                $pointInvited = ConfigContent::where('config_id', 8)->where('name', 'Referral invited')->first();
-                if (!$pointInviter || !$pointInvited) {
-                    throw new  \Exception("Config not found");
-                }
-                $dataInviter = [
-                    'description' => $user->username,
-                    'point' => $pointInviter->value,
-                ];
-                $dataInvited = [
-                    'description' => $userReferral->username,
-                    'point' => $pointInvited->value,
-                ];
-                $pointService->increaseDecreasePoint(UserPoint::TYPE_REFERRAL_INVITER, $dataInviter, $userReferral);
-                $pointService->increaseDecreasePoint(UserPoint::TYPE_REFERRAL_INVITED, $dataInvited, $user);
-            }
 
             $response = $loginController->loginSocial($request)->original;
         } else {
@@ -142,26 +107,6 @@ class RegisterController extends Controller
 
         $user->is_active = 1;
         $user->save();
-
-        //get point
-        if ($user->referral) {
-            $userReferral = User::where('hash_id', $user->referral)->first();
-            $pointInviter = ConfigContent::where('config_id', 8)->where('name', 'Referral inviter')->first();
-            $pointInvited = ConfigContent::where('config_id', 8)->where('name', 'Referral invited')->first();
-            if (!$pointInviter || !$pointInvited) {
-                throw new  \Exception("Config not found");
-            }
-            $dataInviter = [
-                'description' => null,
-                'point' => $pointInviter->value,
-            ];
-            $dataInvited = [
-                'description' => null,
-                'point' => $pointInvited->value,
-            ];
-            $pointService->increaseDecreasePoint(UserPoint::TYPE_REFERRAL_INVITER, $dataInviter, $userReferral);
-            $pointService->increaseDecreasePoint(UserPoint::TYPE_REFERRAL_INVITED, $dataInvited, $user);
-        }
 
         \DB::commit();
 
