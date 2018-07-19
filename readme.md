@@ -30,6 +30,10 @@ Laravel Backend Starter Kit is a project created by codedoct developer, that use
 ```
 	$ php artisan db::seed
 ```
+6. Add access to path storage
+```
+$ sudo chmod -R 777 storage/
+```
 
 ## How to use
 
