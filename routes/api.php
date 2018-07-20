@@ -14,13 +14,6 @@ use Illuminate\Http\Request;
 */
 
 Route::get('test', 'Auth\\RegisterController@test');
-Route::group(array('prefix' => 'test-pdf'), function()
-{
-	Route::get('', function()
-	{
-		return View::make('pdfs.vendor-analytics');
-	});
-});
 
 require_once __DIR__ . '/User/auth.php';
 

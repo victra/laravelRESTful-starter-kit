@@ -7,10 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\ConfigContent;
-use App\Models\UserPoint;
-use App\Models\VendorCategory;
 use App\Http\Services\ImageService;
-use App\Http\Services\PointService;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -34,15 +31,7 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function test() {
-        $result = [
-            'id' => 1,
-            'name' => 'Victra',
-        ];
-        return response()->json($result);
-    }
-
-    public function storeUser(Request $request, ImageService $imageService, LoginController $loginController, PointService $pointService)
+    public function storeUser(Request $request, ImageService $imageService, LoginController $loginController)
     {
         \DB::beginTransaction();
 
@@ -81,6 +70,7 @@ class RegisterController extends Controller
             $response = $loginController->loginSocial($request)->original;
         } else {
             $user->save();
+            dd($user);
             $response = $user;
             dispatch(new \App\Jobs\SendNotificationEmail($user, new \App\Mail\NewRegistrationMail($user)));
         }
@@ -89,7 +79,7 @@ class RegisterController extends Controller
         return response()->json($response);
     }
 
-    public function activateUser(Request $request, PointService $pointService)
+    public function activateUser(Request $request)
     {
         \DB::beginTransaction();
 

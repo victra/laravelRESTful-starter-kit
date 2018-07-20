@@ -22,7 +22,7 @@ class NewRegistrationMail extends Mailable
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->admin_url = env('APP_DEBUG') == 'true' ? 'https://admin-dev.ezyedu.com' : 'https://admin.ezyedu.com';
+        $this->admin_url = env('APP_DEBUG') == 'true' ? 'https://admin-dev.codedoct.com' : 'https://admin.codedoct.com';
     }
 
     /**
@@ -33,6 +33,6 @@ class NewRegistrationMail extends Mailable
     public function build()
     {
         return $this->view('mail.user.new-employee')
-                    ->subject('Welcome to EzyEdu!');
+                    ->subject('Welcome to codedoct!');
     }
 }
