@@ -2,11 +2,10 @@
 
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
 
-## About Laravel Backend Starter Kit
-
+# About Laravel Backend Starter Kit
 Laravel Backend Starter Kit is a project created by codedoct developer, that use for easyly create a project backend with laravel.
 
-## Feature
+# Feature
 1. Auth with RBAC (Role Base Access Controll)
 2. Error handling
 3. Doctrine migration
@@ -16,7 +15,7 @@ Laravel Backend Starter Kit is a project created by codedoct developer, that use
 7. Indonesian geograph
 8. Can access API with login or public
 
-## Instalation
+# Instalation
 > Required php 5.6
 1. Create .env file from .env.example file.
 2. Build the composer:
@@ -38,10 +37,10 @@ $ php artisan db::seed
 $ sudo chmod -R 777 storage/
 ```
 
-## How to use
+# How to use
 > Please read codedoct.com for detail
 
-# Migration
+## Migration
 All table migration in /app/Entities/ path, for documentation just read https://www.laraveldoctrine.org/.
 If you want update your table, you can just edit entities file and update your table with
 ```
@@ -49,20 +48,20 @@ $ php artisan doctrine:migration:diff
 $ php artisan doctrine:migration:migrate
 ```
 
-# Controller
+## Controller
 All controller in /app/Http/Controllers/ path.
 
-# Service
+## Service
 For global method use services in /app/Http/Services/ path.
 
-# Email
+## Email
 Send email with queue jobs in /app/Jobs/ path and handler email in /app/Mail/.
 All resource email template in /resources/views/mail/ path.
 
-# Routes
+## Routes
 All routes in /routes/ path.
 
-# Image
+## Image
 Image save with 2 type which can switch in .env file "STORAGE_FILE="
 1. type "server" => STORAGE_FILE=server
 this type will save all store image in /public/uploads/ path on server
