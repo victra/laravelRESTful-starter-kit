@@ -1,9 +1,8 @@
 <?php
 
 Route::group(['namespace' => 'Thirdparty'], function () {
-	//access login
-	Route::get('unread-notif', 'FCMController@getUnreadNotification');
-  Route::group(['prefix' => 'send-notif'], function () {
+	//access superadmin
+  Route::group(['prefix' => 'send-notif', 'middleware' => 'auth.privilage:qwe123'], function () {
 		Route::post('user', 'FCMController@sendNotificationUser');
 		Route::post('group', 'FCMController@sendNotificationGroup');
 	});

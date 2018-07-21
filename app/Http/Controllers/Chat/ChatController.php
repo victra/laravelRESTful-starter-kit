@@ -54,14 +54,14 @@ class ChatController extends Controller
         $chatContent->save();
 
         //push notif
-        $title = 'Codedoct';
-        $body = $user->name . ' : ' .$chatContent->content;
-        $recipients = $notificationService->getDeviceToken($chatContent->for_user_id);
-        $data = $chatContent->toArray();
-        $data['type'] = 'chat';
-        if ($recipients) {
-            $notificationService->pushNotification($title, $body, $recipients, $data, $chatContent->for_user_id);
-        }
+        // $title = 'Codedoct';
+        // $body = $user->name . ' : ' .$chatContent->content;
+        // $recipients = $notificationService->getDeviceToken($chatContent->for_user_id);
+        // $data = $chatContent->toArray();
+        // $data['type'] = 'chat';
+        // if ($recipients) {
+        //     $notificationService->pushNotification($title, $body, $recipients, $data, $chatContent->for_user_id);
+        // }
 
         \DB::commit();
         return response()->json($chatContent);
@@ -151,14 +151,14 @@ class ChatController extends Controller
             $chatContent->save();
 
             //push notif
-            $title = 'Codedoct';
-            $body = 'Codedoct' . ' : ' .$chatContent->content;
-            $recipients = $notificationService->getDeviceToken($chatContent->for_user_id);
-            $data = $chatContent->toArray();
-            $data['type'] = 'chat';
-            if ($recipients) {
-                $notificationService->pushNotification($title, $body, $recipients, $data, $chatContent->for_user_id);
-            }
+            // $title = 'Codedoct';
+            // $body = 'Codedoct' . ' : ' .$chatContent->content;
+            // $recipients = $notificationService->getDeviceToken($chatContent->for_user_id);
+            // $data = $chatContent->toArray();
+            // $data['type'] = 'chat';
+            // if ($recipients) {
+            //     $notificationService->pushNotification($title, $body, $recipients, $data, $chatContent->for_user_id);
+            // }
         }
 
         \DB::commit();
@@ -183,11 +183,7 @@ class ChatController extends Controller
         $lastChat = ChatContent::where('chat_id', $chat->id)->orderBy('created_at', 'desc')->first();
 
         if ($lastChat && ($lastChat->user_id != $user_id)) {
-            if ($chat->type=='blast') {
-                $chatContents = ChatContent::where('id', $chat_content_id)->get();
-            } else {
-                $chatContents = ChatContent::where('chat_id', $chat->id)->where('is_read', false)->where('for_user_id', $user_id)->get();
-            }
+            $chatContents = ChatContent::where('chat_id', $chat->id)->where('is_read', false)->where('for_user_id', $user_id)->get();
 
             foreach ($chatContents as $chatContent) {
                 $chatContent->is_read = true;

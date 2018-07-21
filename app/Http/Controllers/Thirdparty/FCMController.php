@@ -8,14 +8,6 @@ use Illuminate\Http\Request;
 
 class FCMController extends Controller
 {
-	public function getUnreadNotification(Request $request, NotificationService $notificationService)
-	{
-		$user = $request->user();
-		$unreadNotif = $notificationService->getUnreadBadge($user->id);
-
-		return response()->json($unreadNotif);
-	}
-
 	public function sendNotificationUser(Request $request, NotificationService $notificationService)
 	{
 		$this->validate($request, [

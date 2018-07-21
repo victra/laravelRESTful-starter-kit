@@ -24,7 +24,7 @@ class NotificationService
         return $recipients;
     }
 
-    public function pushNotification($title, $body, $recipients, $data, $for_user_id)
+    public function pushNotification($title, $body, $recipients, $data)
 	{
 		$optionBuilder = new OptionsBuilder();
 		$optionBuilder->setTimeToLive(60*20);
@@ -33,8 +33,7 @@ class NotificationService
 		$notificationBuilder = new PayloadNotificationBuilder();
 		$notificationBuilder->setTitle($title)
 							->setBody($body)
-						    ->setSound('default')
-						    ->setBadge($this->getUnreadBadge($for_user_id));
+						    ->setSound('default');
 
 		$dataBuilder = new PayloadDataBuilder();
 		$dataBuilder->addData($data);
@@ -57,15 +56,4 @@ class NotificationService
 
 		return response()->json($result);
 	}
-
-	public function getUnreadBadge($for_user_id)
-    {
-    	$user = User::find($for_user_id);
-    	$unreadChatContent = ChatContent::where('for_user_id', $for_user_id)->where('is_read', false)->count();
-    	if ($user->role_id==3) {//student
-			$unreadChatContent = $unreadChatContent + ChatContentRead::where('user_id', $for_user_id)->where('is_read', false)->count();
-    	}
-
-    	return $unreadChatContent;
-    }
 }

@@ -49,10 +49,19 @@ class ImageService
 
     public function getFile($file)
     {
-        if (env('STORAGE_FILE', 'server')=='server') {
-            return url('/').'/uploads/'.$file;
-        } elseif (env('STORAGE_FILE', 'server')=='s3') {
-            return 'https://s3.amazonaws.com/'.env('AWS_BUCKET').'/'.$file;
+        if ($file) {
+            if (env('STORAGE_FILE', 'server')=='server') {
+                if(file_exists(public_path().'/uploads/'.$file)) {
+                    return url('/').'/uploads/'.$file;
+                }
+                return null;
+            } elseif (env('STORAGE_FILE', 'server')=='s3') {
+                if (Storage::disk('s3')->has($file)) {
+                    return 'https://s3.amazonaws.com/'.env('AWS_BUCKET').'/'.$file;
+                }
+                return null;
+            }
         }
+        return null;
     }
 }
