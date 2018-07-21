@@ -9,5 +9,5 @@
     <br><br>
     <b>Thank you!</b>
     <br>
-    EzyEdu
+    Codedoct
 </div>

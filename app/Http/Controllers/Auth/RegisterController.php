@@ -70,7 +70,6 @@ class RegisterController extends Controller
             $response = $loginController->loginSocial($request)->original;
         } else {
             $user->save();
-            dd($user);
             $response = $user;
             dispatch(new \App\Jobs\SendNotificationEmail($user, new \App\Mail\NewRegistrationMail($user)));
         }
