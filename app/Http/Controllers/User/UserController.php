@@ -4,10 +4,6 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Ideas;
-use App\Models\Blog;
-use App\Models\Vendor;
-use App\Models\VendorLevel;
 use App\Models\Role;
 use App\Http\Services\ImageService;
 
@@ -30,9 +26,6 @@ class UserController extends Controller
 	public function showMyProfile(Request $request)
 	{
 		$user = $request->user();
-		if ($user->role->hash_id=='zxc123') { //student
-			$user->append('top_three');
-		}
 
 		return response()->json($user);
 	}
@@ -81,12 +74,6 @@ class UserController extends Controller
 
 	public function showProfile(Request $request, User $user)
 	{
-		if ($request->user()->role_id!=1) {
-			if ($user->role->hash_id=='zxc123') { //student
-				$user->append('top_three');
-			}
-		}
-
 		return response()->json($user);
 	}
 

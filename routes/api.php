@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('test', 'Auth\\RegisterController@test');
-
 require_once __DIR__ . '/User/auth.php';
 
 Route::group(['middleware' => ['auth.user']], function () {
@@ -32,7 +30,4 @@ Route::group(['middleware' => ['auth.user:general']], function () {
 	require_once __DIR__ . '/General/general.php';
 });
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 require_once __DIR__ . '/routeBinding.php';

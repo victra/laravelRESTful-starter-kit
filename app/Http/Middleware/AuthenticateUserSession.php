@@ -47,16 +47,20 @@ class AuthenticateUserSession
             $user_session->is_active = true;
             $user_session->user()->associate($user);
         } elseif ($isLogin=='general') {
+            if (!$authorization_header) { //public api
+                return $next($request);
+            }
+
             // Check if can be decrypted
             try {
                 decrypt($authorization_header);
             } catch (DecryptException $e) {
-                return $next($request);
+                throw new \Illuminate\Auth\AuthenticationException();
             }
 
             $user_session = UserSession::where('session', $authorization_header)->where('is_active', true)->where('expired_at', '>=', $date)->first();
             if (!$user_session) {
-                return $next($request);
+                throw new \Illuminate\Auth\AuthenticationException('Invalid session.');
             }
 
             $user = $user_session->user;

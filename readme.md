@@ -14,6 +14,7 @@ Laravel Backend Starter Kit is a project created by codedoct developer, that use
 6. Storage file with AWS
 7. Indonesian geograph
 8. Can access API with login or public
+9. Support create PDF to download
 
 # Instalation
 > Required php 5.6
@@ -38,7 +39,7 @@ $ sudo chmod -R 777 storage/
 ```
 
 # How to use
-> Please read codedoct.com for detail
+> Please read http://www.codedoct.com/2018/07/laravel-starter-kit-laravel-project.html for detail
 
 ## Migration
 All table migration in /app/Entities/ path, for documentation just read https://www.laraveldoctrine.org/.
@@ -50,6 +51,9 @@ $ php artisan doctrine:migration:migrate
 
 ## Controller
 All controller in /app/Http/Controllers/ path.
+
+## Model
+All model in /app/Models/ path.
 
 ## Service
 For global method use services in /app/Http/Services/ path.
@@ -67,10 +71,6 @@ Image save with 2 type which can switch in .env file "STORAGE_FILE="
 this type will save all store image in /public/uploads/ path on server
 2. type "s3" => STORAGE_FILE=s3
 this type will save all store image in S3 AWS, you must fill your IAM(AWS) config to .env file
-AWS_KEY=
-AWS_SECRET=
-AWS_REGION=
-AWS_BUCKET=
 
 
 

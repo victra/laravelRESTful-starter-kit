@@ -90,12 +90,12 @@ class Chat extends Model
                 $result['id'] = $forUser->id;
                 $result['username'] = $forUser->username;
                 $result['name'] = 'Admin';
-                $result['image'] = $imageService->getFile($forUser->image);
+                $result['image_url'] = $imageService->getFile($forUser->image);
             } else {
                 $result['id'] = $forUser->id;
                 $result['username'] = $forUser->username;
                 $result['name'] = $forUser->name;
-                $result['image'] = $imageService->getFile($forUser->image);
+                $result['image_url'] = $imageService->getFile($forUser->image);
             }
         } elseif ($this->for_user_id == $user->id) { //if for user = user login
             $forUser = \DB::table('users')->where('id', $this->user_id)->first();

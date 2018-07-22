@@ -3,8 +3,8 @@
 Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
   //-----user device
   Route::group(['prefix' => 'device'], function () {
-	  // access student and vendor
-	  Route::group(['middleware' => ['auth.privilage:asd123|zxc123']], function () {
+	  // access student
+	  Route::group(['middleware' => ['auth.privilage:zxc123']], function () {
 		  Route::post('', 'UserDeviceController@checkUserDevice');
 	  });
   });
@@ -21,8 +21,8 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
 			Route::get('{user_hash_id}', 'UserController@showProfile');
 	  });
 
-	  // access superadmin and vendor
-		Route::get('', 'UserController@getUsers')->middleware('auth.privilage:qwe123|asd123');
+	  // access superadmin
+		Route::get('', 'UserController@getUsers')->middleware('auth.privilage:qwe123');
 
 		// access superadmin
 	  Route::group(['middleware' => ['auth.privilage:qwe123']], function () {
