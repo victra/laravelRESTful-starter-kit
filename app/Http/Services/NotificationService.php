@@ -7,10 +7,6 @@ use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
 
-use App\Models\User;
-use App\Models\ChatContent;
-use App\Models\ChatContentRead;
-
 class NotificationService
 {
     public function getDeviceToken($user_id)

@@ -15,6 +15,7 @@ use Carbon\Carbon;
 
 class LoginController extends Controller
 {
+    //login social handle by client, BE just retrieve provider
     public function loginSocial(Request $request)
     {
         \DB::beginTransaction();
@@ -153,60 +154,4 @@ class LoginController extends Controller
 
         return response()->json($user);
     }
-
-    // hold dulu login by sosmednya dari depan
-    // public function redirectToProvider($provider)
-    // {
-    //     return Socialite::driver($provider)->stateless()->redirect();
-    // }
-    // public function handleProviderCallback($provider)
-    // {
-    //     $user = Socialite::driver($provider)->stateless()->user();
-    //     $authUser = $this->findOrCreateUser($user, $provider);
-    //     $response = $this->loginSocialite($authUser);
-
-    //     return response()->json($response);
-    // }
-
-    // public function loginSocialite($user)
-    // {
-    //     $date = new Carbon();
-
-    //     $user_session = new UserSession;
-    //     $user_session->session = encrypt(str_random());
-    //     $user_session->user_agent = request()->header('User-Agent');
-    //     $user_session->is_active = true;
-    //     $user_session->user()->associate($user);
-    //     $user_session->expired_at = $date->addDay(15);
-    //     $user_session->save();
-
-    //     config()->set('constants.CURRENT_USER_SESSION', $user_session->session);
-
-    //     Auth::login($user);
-
-    //     $response['session'] = config('constants.CURRENT_USER_SESSION');
-    //     $response['user'] = $user;
-
-    //     return $response;
-    // }
-
-    // public function findOrCreateUser($user, $provider)
-    // {
-    //     $authUser = User::where('provider_id', $user->id)->first();
-    //     if ($authUser) {
-    //         $authUser->update([
-    //             'name'      => $user->name,
-    //             'username'  => getUsernameSocial($provider, $user),
-    //         ]);
-
-    //         return $authUser;
-    //     }
-    //     return User::create([
-    //         'is_active' => true,
-    //         'name'     => $user->name,
-    //         'email'    => $user->email,
-    //         'provider' => $provider,
-    //         'provider_id' => $user->id
-    //     ]);
-    // }
 }

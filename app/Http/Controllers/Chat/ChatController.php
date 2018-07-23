@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Chat;
 
 use App\Http\Controllers\Controller;
-use App\Http\Services\UserService;
 use App\Models\User;
 use App\Models\Chat;
-use App\Models\ChatAutomated;
 use App\Models\ChatContent;
-use App\Models\ChatContentRead;
 use App\Http\Services\NotificationService;
 
 use Illuminate\Http\Request;

@@ -4,17 +4,9 @@ namespace App\Http\Controllers\Thirdparty;
 
 use App\Http\Controllers\Controller;
 use App\Veritrans\Veritrans;
-use App\Models\User;
-use App\Models\Invoice;
-use App\Models\UserBalance;
-use App\Models\UserPoint;
 use App\Models\LogMidtrans;
 use App\Models\UserSession;
-use App\Models\UserCouponRedeem;
-use App\Models\ConfigContent;
-use App\Models\ChatContent;
 use App\Http\Services\NotificationService;
-use App\Http\Services\PointService;
 
 use Carbon\Carbon;
 
@@ -26,10 +18,10 @@ class MidtransController extends Controller
     {   
     	if (env('APP_ENV', 'local')=='production') {
 	        Veritrans::$isProduction = true;
-	        Veritrans::$serverKey = env('MIDTRANS_PRODUCTION', 'SB-Mid-server-bJXghQDKV90RkcXfD90a4UeRtestttt');
+	        Veritrans::$serverKey = env('MIDTRANS_PRODUCTION', 'SB-Mid-server-bJXgasdsfasd90a4UeRtestttt');
     	} else {
     		Veritrans::$isProduction = false;
-	        Veritrans::$serverKey = env('MIDTRANS_SANDBOX', 'SB-Mid-server-bJXghQDKV90RkcXfD90a4UeRtestttt');
+	        Veritrans::$serverKey = env('MIDTRANS_SANDBOX', 'SB-Mid-server-bJXgasdsfasd90a4UeRtestttt');
     	}
     }
 
