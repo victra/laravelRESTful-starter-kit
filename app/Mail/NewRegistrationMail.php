@@ -22,7 +22,7 @@ class NewRegistrationMail extends Mailable
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->admin_url = env('APP_DEBUG') == 'true' ? 'https://admin-dev.codedoct.com' : 'https://admin.codedoct.com';
+        $this->admin_url = env('APP_DEBUG') == 'true' ? env('APP_URL_DEV') : env('APP_URL');
     }
 
     /**

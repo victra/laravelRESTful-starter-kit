@@ -28,13 +28,9 @@ class SendNotificationEmail implements ShouldQueue
         $this->mailClass = $mailClass;
         $this->to = $to;
 
-        // if ($to instanceof User) {
-        //     $this->to = $to->getEmail();
-        // }
         if ($to instanceof User) {
             $this->to = $to->email;
         }
-
     }
 
     /**

@@ -47,12 +47,6 @@ class ChatContent
     protected $content;
 
     /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $attached_vendor;
-
-    /**
      * @var boolean
      * @ORM\Column(name="is_read",type="boolean")
      */
