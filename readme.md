@@ -33,10 +33,11 @@ $ php artisan doctrine:migration:migrate
 ```
 $ php artisan db::seed
 ```
-6. Give full access to path storage
+6. Give full access to path storage (linux)
 ```
 $ sudo chmod -R 777 storage/
 ```
+7. Create folder "doctrine" in path /database/migrations/
 
 # How to use
 > Please read http://www.codedoct.com/2018/07/laravel-starter-kit-laravel-project.html for detail
