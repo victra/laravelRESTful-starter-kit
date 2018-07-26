@@ -24,20 +24,20 @@ Laravel Backend Starter Kit is a project created by codedoct developer, that use
 $ composer install
 ```
 3. Fill project information like DB, AWS key, mailtrap, etc to .env file
-4. Migration Database:
+4. Create folder "doctrine" in path /database/migrations/
+5. Migration Database:
 ```
 $ php artisan doctrine:migration:diff
 $ php artisan doctrine:migration:migrate
 ```
-5. Seeding Database:
+6. Seeding Database:
 ```
 $ php artisan db::seed
 ```
-6. Give full access to path storage (linux)
+7. Give full access to path storage (linux)
 ```
 $ sudo chmod -R 777 storage/
 ```
-7. Create folder "doctrine" in path /database/migrations/
 
 # How to use
 > Please read http://www.codedoct.com/2018/07/laravel-starter-kit-laravel-project.html for detail
