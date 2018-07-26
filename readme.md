@@ -32,7 +32,7 @@ $ php artisan doctrine:migration:migrate
 ```
 6. Seeding Database:
 ```
-$ php artisan db::seed
+$ php artisan db:seed
 ```
 7. Give full access to path storage (linux)
 ```
