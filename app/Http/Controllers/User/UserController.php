@@ -135,4 +135,29 @@ class UserController extends Controller
         \DB::commit();
 		return response()->json($user);
 	}
+
+    public function downloadMyProfile(Request $request)
+    {
+        $user = $request->user();
+        
+        $html_user = view('pdfs.user-profile')
+                    ->with('user', $user)
+                    ->render();
+
+        // if u use 2 page pdf just add 2 html
+        // $html_2 = view('pdfs.html-2')
+        //         ->with('data', $data)
+        //         ->render();
+
+        // $pdf = \PDF::loadHTML($html_user . $html_2);
+
+        $pdf = \PDF::loadHTML($html_user);
+        $pdf->setPaper('A4');
+        $pdf->output();
+        $dom_pdf = $pdf->getDomPDF();
+
+        $canvas = $dom_pdf->get_canvas();
+        $canvas->page_text(270, 800, "PAGE {PAGE_NUM} OF {PAGE_COUNT}", null, 10, array(1.00,0.25,0.00,0.10));
+        return $pdf->download('profile.pdf');
+    }
 }

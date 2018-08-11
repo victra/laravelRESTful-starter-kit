@@ -3,7 +3,7 @@
 Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
   //-----user device
   Route::group(['prefix' => 'device'], function () {
-	  // access student
+	  // access user
 	  Route::group(['middleware' => ['auth.privilage:zxc123']], function () {
 		  Route::post('', 'UserDeviceController@checkUserDevice');
 	  });
@@ -16,6 +16,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
 		  Route::post('change-email', 'UserController@requestChangeEmail');
 		  Route::post('setnew-email', 'UserController@setNewEmail');
 
+			Route::get('download', 'UserController@downloadMyProfile');
 			Route::get('', 'UserController@showMyProfile');
 		  Route::post('', 'UserController@updateMyProfile');
 			Route::get('{user_hash_id}', 'UserController@showProfile');
