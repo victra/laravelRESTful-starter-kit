@@ -1,7 +1,5 @@
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-
 # About Laravel Backend Starter Kit
 Laravel Backend Starter Kit is a project created by codedoct developer, that use for easyly create a project backend with laravel.
 
